@@ -38,6 +38,7 @@
 #include <ipmitool/ipmi_main.h>
 
 #include <ipmitool/ipmi_ocsoem.h>
+#include <ipmitool/ipmi_wcscli.h>
 #include <ipmitool/ipmi_sdr.h>
 #include <ipmitool/ipmi_gendev.h>
 #include <ipmitool/ipmi_sel.h>
@@ -89,6 +90,7 @@ struct ipmi_cmd ipmitool_cmd_list[] = {
 	{ ipmi_rawspd_main,  "spd",     "Print SPD info from remote I2C device" },
 	{ ipmi_lanp_main,    "lan",     "Configure LAN Channels" },
 	{ ipmi_chassis_main, "chassis", "Get chassis status and set power state" },
+	{ ipmi_wcscli_main,  "wcscli",  "WCSCLI-compatible commands for direct BMC access" },
 	{ ipmi_msftoem_main, "ocsoem", "OEM commands for Open Cloud Server"},
 	{ ipmi_power_main,   "power",   "Shortcut to chassis power commands" },
 	{ ipmi_event_main,   "event",   "Send pre-defined events to MC" },

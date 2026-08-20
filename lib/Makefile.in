@@ -134,14 +134,14 @@ CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 am_libipmitool_la_OBJECTS = helper.lo ipmi_sdr.lo ipmi_sel.lo \
 	ipmi_sol.lo ipmi_pef.lo ipmi_ocsoem.lo ipmi_ocsoem_rf.lo \
-	ipmi_lanp.lo ipmi_fru.lo ipmi_chassis.lo ipmi_mc.lo log.lo \
-	dimm_spd.lo ipmi_sensor.lo ipmi_channel.lo ipmi_event.lo \
-	ipmi_session.lo ipmi_strings.lo ipmi_user.lo ipmi_raw.lo \
-	ipmi_oem.lo ipmi_isol.lo ipmi_sunoem.lo ipmi_fwum.lo \
-	ipmi_picmg.lo ipmi_main.lo ipmi_tsol.lo ipmi_firewall.lo \
-	ipmi_kontronoem.lo ipmi_hpmfwupg.lo ipmi_sdradd.lo \
-	ipmi_ekanalyzer.lo ipmi_gendev.lo ipmi_ime.lo ipmi_delloem.lo \
-	ipmi_dcmi.lo hpm2.lo ipmi_vita.lo md5.lo
+	ipmi_wcscli.lo ipmi_lanp.lo ipmi_fru.lo ipmi_chassis.lo \
+	ipmi_mc.lo log.lo dimm_spd.lo ipmi_sensor.lo ipmi_channel.lo \
+	ipmi_event.lo ipmi_session.lo ipmi_strings.lo ipmi_user.lo \
+	ipmi_raw.lo ipmi_oem.lo ipmi_isol.lo ipmi_sunoem.lo \
+	ipmi_fwum.lo ipmi_picmg.lo ipmi_main.lo ipmi_tsol.lo \
+	ipmi_firewall.lo ipmi_kontronoem.lo ipmi_hpmfwupg.lo \
+	ipmi_sdradd.lo ipmi_ekanalyzer.lo ipmi_gendev.lo ipmi_ime.lo \
+	ipmi_delloem.lo ipmi_dcmi.lo hpm2.lo ipmi_vita.lo md5.lo
 libipmitool_la_OBJECTS = $(am_libipmitool_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -184,8 +184,8 @@ am__depfiles_remade = ./$(DEPDIR)/dimm_spd.Plo ./$(DEPDIR)/helper.Plo \
 	./$(DEPDIR)/ipmi_session.Plo ./$(DEPDIR)/ipmi_sol.Plo \
 	./$(DEPDIR)/ipmi_strings.Plo ./$(DEPDIR)/ipmi_sunoem.Plo \
 	./$(DEPDIR)/ipmi_tsol.Plo ./$(DEPDIR)/ipmi_user.Plo \
-	./$(DEPDIR)/ipmi_vita.Plo ./$(DEPDIR)/log.Plo \
-	./$(DEPDIR)/md5.Plo
+	./$(DEPDIR)/ipmi_vita.Plo ./$(DEPDIR)/ipmi_wcscli.Plo \
+	./$(DEPDIR)/log.Plo ./$(DEPDIR)/md5.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -390,7 +390,7 @@ top_srcdir = @top_srcdir@
 INCLUDES = -I$(top_srcdir)/include
 MAINTAINERCLEANFILES = Makefile.in
 noinst_LTLIBRARIES = libipmitool.la
-libipmitool_la_SOURCES = helper.c ipmi_sdr.c ipmi_sel.c ipmi_sol.c ipmi_pef.c ipmi_ocsoem.c ipmi_ocsoem_rf.c \
+libipmitool_la_SOURCES = helper.c ipmi_sdr.c ipmi_sel.c ipmi_sol.c ipmi_pef.c ipmi_ocsoem.c ipmi_ocsoem_rf.c ipmi_wcscli.c \
 				  ipmi_lanp.c ipmi_fru.c ipmi_chassis.c ipmi_mc.c log.c            \
 				  dimm_spd.c ipmi_sensor.c ipmi_channel.c ipmi_event.c             \
 				  ipmi_session.c ipmi_strings.c ipmi_user.c ipmi_raw.c             \
@@ -416,9 +416,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign lib/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu lib/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign lib/Makefile
+	  $(AUTOMAKE) --gnu lib/Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
 	  *config.status*) \
@@ -492,6 +492,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ipmi_tsol.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ipmi_user.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ipmi_vita.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ipmi_wcscli.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/log.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/md5.Plo@am__quote@ # am--include-marker
 
@@ -698,6 +699,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/ipmi_tsol.Plo
 	-rm -f ./$(DEPDIR)/ipmi_user.Plo
 	-rm -f ./$(DEPDIR)/ipmi_vita.Plo
+	-rm -f ./$(DEPDIR)/ipmi_wcscli.Plo
 	-rm -f ./$(DEPDIR)/log.Plo
 	-rm -f ./$(DEPDIR)/md5.Plo
 	-rm -f Makefile
@@ -782,6 +784,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/ipmi_tsol.Plo
 	-rm -f ./$(DEPDIR)/ipmi_user.Plo
 	-rm -f ./$(DEPDIR)/ipmi_vita.Plo
+	-rm -f ./$(DEPDIR)/ipmi_wcscli.Plo
 	-rm -f ./$(DEPDIR)/log.Plo
 	-rm -f ./$(DEPDIR)/md5.Plo
 	-rm -f Makefile

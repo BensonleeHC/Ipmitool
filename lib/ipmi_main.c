@@ -75,9 +75,9 @@
 #endif
 
 #ifdef ENABLE_ALL_OPTIONS
-# define OPTION_STRING	"I:46hVvcgsEKYao:H:d:P:f:U:p:C:L:A:t:T:m:z:S:l:b:B:e:k:y:O:R:N:D:"
+# define OPTION_STRING	"+I:46hVvcgsEKYao:H:d:P:f:U:p:C:L:A:t:T:m:z:S:l:b:B:e:k:y:O:R:N:D:"
 #else
-# define OPTION_STRING	"I:46hVvcH:f:U:p:d:S:D:"
+# define OPTION_STRING	"+I:46hVvcH:f:U:p:d:S:D:"
 #endif
 
 extern int verbose;
@@ -1128,5 +1128,4 @@ ipmi_main(int argc, char ** argv,
 
 	return rc;
 }
-
 
