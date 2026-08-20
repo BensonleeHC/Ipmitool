@@ -120,6 +120,7 @@ show_system(struct ipmi_intf *intf, int argc, char **argv)
 	const char *state[] = { "state" };
 	const char *nextboot[] = { "nextboot" };
 	const char *led[] = { "led" };
+	const char *log[] = { "log" };
 	const char *logread[] = { "log", "read" };
 	const char *biosconfig[] = { "bios", "config" };
 	const char *bioscode[] = { "bios", "code" };
@@ -156,7 +157,8 @@ show_system(struct ipmi_intf *intf, int argc, char **argv)
 		a1[0] = "getledstatus";
 		return run(intf, "ocsoem", 1, a1);
 	}
-	if (same(argc, argv, 2, logread) && argc == 2) {
+	if ((same(argc, argv, 1, log) && argc == 1) ||
+		(same(argc, argv, 2, logread) && argc == 2)) {
 		a1[0] = "elist";
 		return run(intf, "sel", 1, a1);
 	}

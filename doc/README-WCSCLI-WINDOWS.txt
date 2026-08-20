@@ -17,7 +17,7 @@ wcscli and accepts 1..48 for Rack Manager syntax compatibility. In direct-BMC
 mode -H is the actual destination; -i does not perform RM address translation.
 
 Implemented show commands:
-  info, health, fru, nvme, state, nextboot, led, log read,
+  info, health, fru, nvme, state, nextboot, led, log, log read,
   bios config, bios code, tpm presence
 
 Implemented set commands:

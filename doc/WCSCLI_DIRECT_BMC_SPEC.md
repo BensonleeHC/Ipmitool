@@ -58,7 +58,7 @@ syntax remains available during migration.
 
 ```text
 wcscli show system <info|health|fru|nvme|state|nextboot|led> [-i 1..48]
-wcscli show system log read [-i 1..48]
+wcscli show system log [read] [-i 1..48]
 wcscli show system bios <config|code> [options] [-i 1..48]
 wcscli show system tpm presence [-i 1..48]
 wcscli set system <on|off|reset> [-i 1..48]
