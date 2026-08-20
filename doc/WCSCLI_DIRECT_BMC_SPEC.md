@@ -1,6 +1,6 @@
 # WCSCLI-compatible direct-BMC command specification
 
-Status: implementation complete; live-BMC qualification pending
+Status: implementation complete; NVMe path live-BMC qualified
 
 Branch: `feature/wcscli-direct-bmc`
 
@@ -106,3 +106,21 @@ feature decoders, but it must preserve the shared-handler rule: `wcscli` and
 - legacy simulated WCSCLI service commands
 - serial-session management outside standard IPMI SOL
 - automatic server-ID-to-BMC-address translation in direct-BMC mode
+
+## 8. Windows build and live validation
+
+The Windows x64 build must expose POSIX/GNU function prototypes consistently.
+In particular, `log.c` defines `_GNU_SOURCE` before system headers so that
+`strdup()` has the correct pointer return type. Without this on a strict C99
+64-bit build, shutdown can abort inside `log_halt()` and appear to hang.
+
+Live test target `10.46.127.44` verified the following with `-N 1 -R 1`:
+
+| Command | Result | Elapsed |
+| --- | --- | --- |
+| `raw 0x38 0x86` | Exit 0, `0d 00 00 00 00 00` | 400 ms |
+| `ocsoem nvme` | Exit 0 | 406 ms |
+| `wcscli show system nvme -i 1` | Exit 0, output matched `ocsoem` | 411 ms |
+
+Some drive-specific OEM I2C requests returned completion code `0xCC`; those
+errors were reported without preventing normal process termination.

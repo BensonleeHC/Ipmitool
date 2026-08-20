@@ -32,5 +32,5 @@ Select BMC instead with `console bmc`. The selector uses OEM NetFn 34h,
 command 93h, payload 01 00 for Host or 01 04 for BMC. SOL activation remains
 the standard ipmitool command and is intentionally not hidden in wcscli.
 
-See WCSCLI_DIRECT_BMC_SPEC.md and WCSCLI_COMMAND_MATRIX.md. Live-BMC
-qualification is still required.
+See WCSCLI_DIRECT_BMC_SPEC.md and WCSCLI_COMMAND_MATRIX.md. The NVMe path and
+normal process exit were verified against an Olympus BMC at 10.46.127.44.
