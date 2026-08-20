@@ -32,7 +32,7 @@ INCLUDES			= -I$(top_srcdir)/include
 MAINTAINERCLEANFILES		= Makefile.in
 
 noinst_LTLIBRARIES		= libipmitool.la
-libipmitool_la_SOURCES	= helper.c ipmi_sdr.c ipmi_sel.c ipmi_sol.c ipmi_pef.c ipmi_ocsoem.c ipmi_ocsoem_rf.c ipmi_wcscli.c \
+libipmitool_la_SOURCES	= helper.c ipmi_sdr.c ipmi_sel.c ipmi_sol.c ipmi_pef.c ipmi_ocsoem.c ipmi_ocsoem_rf.c ipmi_wcscli.c ipmi_ocs_console.c \
 				  ipmi_lanp.c ipmi_fru.c ipmi_chassis.c ipmi_mc.c log.c            \
 				  dimm_spd.c ipmi_sensor.c ipmi_channel.c ipmi_event.c             \
 				  ipmi_session.c ipmi_strings.c ipmi_user.c ipmi_raw.c             \

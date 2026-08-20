@@ -134,14 +134,15 @@ CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 am_libipmitool_la_OBJECTS = helper.lo ipmi_sdr.lo ipmi_sel.lo \
 	ipmi_sol.lo ipmi_pef.lo ipmi_ocsoem.lo ipmi_ocsoem_rf.lo \
-	ipmi_wcscli.lo ipmi_lanp.lo ipmi_fru.lo ipmi_chassis.lo \
-	ipmi_mc.lo log.lo dimm_spd.lo ipmi_sensor.lo ipmi_channel.lo \
-	ipmi_event.lo ipmi_session.lo ipmi_strings.lo ipmi_user.lo \
-	ipmi_raw.lo ipmi_oem.lo ipmi_isol.lo ipmi_sunoem.lo \
-	ipmi_fwum.lo ipmi_picmg.lo ipmi_main.lo ipmi_tsol.lo \
-	ipmi_firewall.lo ipmi_kontronoem.lo ipmi_hpmfwupg.lo \
-	ipmi_sdradd.lo ipmi_ekanalyzer.lo ipmi_gendev.lo ipmi_ime.lo \
-	ipmi_delloem.lo ipmi_dcmi.lo hpm2.lo ipmi_vita.lo md5.lo
+	ipmi_wcscli.lo ipmi_ocs_console.lo ipmi_lanp.lo ipmi_fru.lo \
+	ipmi_chassis.lo ipmi_mc.lo log.lo dimm_spd.lo ipmi_sensor.lo \
+	ipmi_channel.lo ipmi_event.lo ipmi_session.lo ipmi_strings.lo \
+	ipmi_user.lo ipmi_raw.lo ipmi_oem.lo ipmi_isol.lo \
+	ipmi_sunoem.lo ipmi_fwum.lo ipmi_picmg.lo ipmi_main.lo \
+	ipmi_tsol.lo ipmi_firewall.lo ipmi_kontronoem.lo \
+	ipmi_hpmfwupg.lo ipmi_sdradd.lo ipmi_ekanalyzer.lo \
+	ipmi_gendev.lo ipmi_ime.lo ipmi_delloem.lo ipmi_dcmi.lo \
+	hpm2.lo ipmi_vita.lo md5.lo
 libipmitool_la_OBJECTS = $(am_libipmitool_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -176,16 +177,17 @@ am__depfiles_remade = ./$(DEPDIR)/dimm_spd.Plo ./$(DEPDIR)/helper.Plo \
 	./$(DEPDIR)/ipmi_ime.Plo ./$(DEPDIR)/ipmi_isol.Plo \
 	./$(DEPDIR)/ipmi_kontronoem.Plo ./$(DEPDIR)/ipmi_lanp.Plo \
 	./$(DEPDIR)/ipmi_main.Plo ./$(DEPDIR)/ipmi_mc.Plo \
-	./$(DEPDIR)/ipmi_ocsoem.Plo ./$(DEPDIR)/ipmi_ocsoem_rf.Plo \
-	./$(DEPDIR)/ipmi_oem.Plo ./$(DEPDIR)/ipmi_pef.Plo \
-	./$(DEPDIR)/ipmi_picmg.Plo ./$(DEPDIR)/ipmi_raw.Plo \
-	./$(DEPDIR)/ipmi_sdr.Plo ./$(DEPDIR)/ipmi_sdradd.Plo \
-	./$(DEPDIR)/ipmi_sel.Plo ./$(DEPDIR)/ipmi_sensor.Plo \
-	./$(DEPDIR)/ipmi_session.Plo ./$(DEPDIR)/ipmi_sol.Plo \
-	./$(DEPDIR)/ipmi_strings.Plo ./$(DEPDIR)/ipmi_sunoem.Plo \
-	./$(DEPDIR)/ipmi_tsol.Plo ./$(DEPDIR)/ipmi_user.Plo \
-	./$(DEPDIR)/ipmi_vita.Plo ./$(DEPDIR)/ipmi_wcscli.Plo \
-	./$(DEPDIR)/log.Plo ./$(DEPDIR)/md5.Plo
+	./$(DEPDIR)/ipmi_ocs_console.Plo ./$(DEPDIR)/ipmi_ocsoem.Plo \
+	./$(DEPDIR)/ipmi_ocsoem_rf.Plo ./$(DEPDIR)/ipmi_oem.Plo \
+	./$(DEPDIR)/ipmi_pef.Plo ./$(DEPDIR)/ipmi_picmg.Plo \
+	./$(DEPDIR)/ipmi_raw.Plo ./$(DEPDIR)/ipmi_sdr.Plo \
+	./$(DEPDIR)/ipmi_sdradd.Plo ./$(DEPDIR)/ipmi_sel.Plo \
+	./$(DEPDIR)/ipmi_sensor.Plo ./$(DEPDIR)/ipmi_session.Plo \
+	./$(DEPDIR)/ipmi_sol.Plo ./$(DEPDIR)/ipmi_strings.Plo \
+	./$(DEPDIR)/ipmi_sunoem.Plo ./$(DEPDIR)/ipmi_tsol.Plo \
+	./$(DEPDIR)/ipmi_user.Plo ./$(DEPDIR)/ipmi_vita.Plo \
+	./$(DEPDIR)/ipmi_wcscli.Plo ./$(DEPDIR)/log.Plo \
+	./$(DEPDIR)/md5.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -390,7 +392,7 @@ top_srcdir = @top_srcdir@
 INCLUDES = -I$(top_srcdir)/include
 MAINTAINERCLEANFILES = Makefile.in
 noinst_LTLIBRARIES = libipmitool.la
-libipmitool_la_SOURCES = helper.c ipmi_sdr.c ipmi_sel.c ipmi_sol.c ipmi_pef.c ipmi_ocsoem.c ipmi_ocsoem_rf.c ipmi_wcscli.c \
+libipmitool_la_SOURCES = helper.c ipmi_sdr.c ipmi_sel.c ipmi_sol.c ipmi_pef.c ipmi_ocsoem.c ipmi_ocsoem_rf.c ipmi_wcscli.c ipmi_ocs_console.c \
 				  ipmi_lanp.c ipmi_fru.c ipmi_chassis.c ipmi_mc.c log.c            \
 				  dimm_spd.c ipmi_sensor.c ipmi_channel.c ipmi_event.c             \
 				  ipmi_session.c ipmi_strings.c ipmi_user.c ipmi_raw.c             \
@@ -475,6 +477,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ipmi_lanp.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ipmi_main.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ipmi_mc.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ipmi_ocs_console.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ipmi_ocsoem.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ipmi_ocsoem_rf.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ipmi_oem.Plo@am__quote@ # am--include-marker
@@ -682,6 +685,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/ipmi_lanp.Plo
 	-rm -f ./$(DEPDIR)/ipmi_main.Plo
 	-rm -f ./$(DEPDIR)/ipmi_mc.Plo
+	-rm -f ./$(DEPDIR)/ipmi_ocs_console.Plo
 	-rm -f ./$(DEPDIR)/ipmi_ocsoem.Plo
 	-rm -f ./$(DEPDIR)/ipmi_ocsoem_rf.Plo
 	-rm -f ./$(DEPDIR)/ipmi_oem.Plo
@@ -767,6 +771,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/ipmi_lanp.Plo
 	-rm -f ./$(DEPDIR)/ipmi_main.Plo
 	-rm -f ./$(DEPDIR)/ipmi_mc.Plo
+	-rm -f ./$(DEPDIR)/ipmi_ocs_console.Plo
 	-rm -f ./$(DEPDIR)/ipmi_ocsoem.Plo
 	-rm -f ./$(DEPDIR)/ipmi_ocsoem_rf.Plo
 	-rm -f ./$(DEPDIR)/ipmi_oem.Plo

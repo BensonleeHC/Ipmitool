@@ -5,36 +5,32 @@ Version: ipmitool 1.8.16-cvs
 Interfaces: lan, lanplus
 Commands: standard ipmitool, ocsoem, wcscli
 
-Initial WCSCLI command:
-
-  ipmitool.exe -I lanplus -H <BMC-IP> -U <user> -E \
-      wcscli show system nvme [-i 1..48]
-
-PowerShell password example:
+PowerShell example:
 
   $env:IPMI_PASSWORD = "your-password"
   .\ipmitool.exe -I lanplus -H <BMC-IP> -U <user> -E `
       wcscli show system nvme -i 12
   Remove-Item Env:IPMI_PASSWORD
 
-The uppercase -I is an ipmitool global option.  The lowercase -i belongs to
-the WCSCLI command.  All global connection options must appear before
-"wcscli".
+-I is parsed globally as the IPMI interface. Lower-case -i is parsed only by
+wcscli and accepts 1..48 for Rack Manager syntax compatibility. In direct-BMC
+mode -H is the actual destination; -i does not perform RM address translation.
 
-Direct-BMC target behavior:
+Implemented show commands:
+  info, health, fru, nvme, state, nextboot, led, log read,
+  bios config, bios code, tpm presence
 
-  -H selects the BMC that receives the command.  The optional -i value is
-  accepted for Rack Manager command-line compatibility but does not change
-  the direct-BMC target.
+Implemented set commands:
+  on, off, reset, nextboot, led, log clear, bios config, tpm presence,
+  console bmc, console host
 
-Legacy equivalent:
+Console example:
+  .\ipmitool.exe <connection-options> wcscli set system console host -i 12
+  .\ipmitool.exe <connection-options> sol activate
 
-  ipmitool.exe -I lanplus -H <BMC-IP> -U <user> -E ocsoem nvme
+Select BMC instead with `console bmc`. The selector uses OEM NetFn 34h,
+command 93h, payload 01 00 for Host or 01 04 for BMC. SOL activation remains
+the standard ipmitool command and is intentionally not hidden in wcscli.
 
-Runtime files:
-
-  ipmitool.exe
-  msys-2.0.dll
-  msys-crypto-3.dll
-
-Live-BMC validation is still required.
+See WCSCLI_DIRECT_BMC_SPEC.md and WCSCLI_COMMAND_MATRIX.md. Live-BMC
+qualification is still required.

@@ -1,6 +1,6 @@
 # WCSCLI-compatible direct-BMC command specification
 
-Status: initial implementation
+Status: implementation complete; live-BMC qualification pending
 
 Branch: `feature/wcscli-direct-bmc`
 
@@ -54,21 +54,25 @@ The WCSCLI dispatcher must not duplicate OEM request implementations.  It
 routes a compatible command to a shared feature handler.  Legacy `ocsoem`
 syntax remains available during migration.
 
-## 4. Initial command
+## 4. Command surface
 
 ```text
-wcscli show system nvme [-i 1..48]
+wcscli show system <info|health|fru|nvme|state|nextboot|led> [-i 1..48]
+wcscli show system log read [-i 1..48]
+wcscli show system bios <config|code> [options] [-i 1..48]
+wcscli show system tpm presence [-i 1..48]
+wcscli set system <on|off|reset> [-i 1..48]
+wcscli set system <nextboot|led|log|bios|tpm|console> ... [-i 1..48]
 ```
 
-Mapping:
+The dispatcher reuses standard `power`, `chassis`, `fru`, `sdr`, `sel`, and
+`mc` handlers plus existing `ocsoem` handlers. See `WCSCLI_COMMAND_MATRIX.md`
+for exact mappings. NVMe therefore retains its storage-map and subsequent OEM
+I2C transactions without a duplicate protocol stack.
 
-```text
-wcscli show system nvme -> existing ocsoem nvme implementation
-```
-
-The implementation therefore retains the existing NVMe storage-map request
-and subsequent OEM I2C transactions without introducing another protocol
-stack.
+The console selector is its own OEM protocol module. It sends NetFn `0x34`,
+command `0x93`, payload `01 04` for BMC or `01 00` for Host. The user then runs
+the existing `sol activate` command.
 
 ## 5. Error behavior
 
@@ -84,8 +88,10 @@ stack.
 src/ipmitool.c                 top-level command registration
 lib/ipmi_main.c                global option boundary
 lib/ipmi_wcscli.c              WCSCLI grammar and dispatch only
+lib/ipmi_ocs_console.c          OEM console-mux request module
 lib/ipmi_ocsoem.c              existing OCS OEM features
 include/ipmitool/ipmi_wcscli.h public dispatcher declaration
+include/ipmitool/ipmi_ocs_console.h console selector interface
 ```
 
 Future protocol refactoring should separate generic OCS request helpers from
