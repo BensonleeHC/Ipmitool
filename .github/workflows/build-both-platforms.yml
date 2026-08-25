@@ -13,7 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install build dependencies
-        run: sudo apt-get update && sudo apt-get install -y build-essential libssl-dev file
+        run: >-
+          sudo apt-get update && sudo apt-get install -y
+          build-essential autoconf automake libtool libssl-dev file
       - name: Make scripts executable
         run: chmod +x ./configure scripts/build-linux.sh
       - name: Build and verify
@@ -36,7 +38,10 @@ jobs:
           update: true
           install: >-
             base-devel
+            autoconf
+            automake
             gcc
+            libtool
             make
             openssl-devel
       - name: Build and verify

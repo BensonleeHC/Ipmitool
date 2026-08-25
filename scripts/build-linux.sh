@@ -5,6 +5,7 @@ repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 output_dir="${1:-${repo_dir}/dist/ipmitool-wcscli-linux-x86_64}"
 
 cd "${repo_dir}"
+autoreconf -fi
 ./configure \
   --enable-intf-lan \
   --enable-intf-lanplus \

@@ -14,7 +14,7 @@ Install dependencies and run:
 
 ```sh
 sudo apt-get update
-sudo apt-get install -y build-essential libssl-dev file
+sudo apt-get install -y build-essential autoconf automake libtool libssl-dev file
 ./scripts/build-linux.sh
 ```
 
@@ -25,7 +25,8 @@ and `wcscli`; it does not require an MSYS runtime.
 
 ## Windows build
 
-In an MSYS2 MSYS shell with `base-devel`, `gcc`, `make`, and `openssl-devel`:
+In an MSYS2 MSYS shell with `base-devel`, `autoconf`, `automake`, `gcc`,
+`libtool`, `make`, and `openssl-devel`:
 
 ```sh
 ./scripts/build-windows-msys2.sh
