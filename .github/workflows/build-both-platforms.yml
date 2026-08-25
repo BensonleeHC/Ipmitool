@@ -1,0 +1,45 @@
+name: Build Windows and Ubuntu
+
+on:
+  push:
+    branches: [main, feature/wcscli-direct-bmc]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ubuntu-x86_64:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential libssl-dev file
+      - name: Build and verify
+        run: ./scripts/build-linux.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ipmitool-wcscli-ubuntu-22.04-x86_64
+          path: dist/ipmitool-wcscli-linux-x86_64
+
+  windows-x64:
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MSYS
+          update: true
+          install: >-
+            base-devel
+            gcc
+            make
+            openssl-devel
+      - name: Build and verify
+        run: ./scripts/build-windows-msys2.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ipmitool-wcscli-windows-x64
+          path: dist/ipmitool-wcscli-windows-x64
