@@ -23,6 +23,10 @@ the Ubuntu OpenSSL runtime; install the matching `libssl3` package when copying
 it to another Ubuntu server. The artifact supports `lan`, `lanplus`, `ocsoem`,
 and `wcscli`; it does not require an MSYS runtime.
 
+Both release builds intentionally enable only the remote `lan` and `lanplus`
+interfaces. Local OpenIPMI, FreeIPMI, USB, and serial hardware interfaces are
+disabled; standard remote SOL remains available through `lanplus`.
+
 ## Windows build
 
 In an MSYS2 MSYS shell with `base-devel`, `autoconf`, `automake`, `gcc`,

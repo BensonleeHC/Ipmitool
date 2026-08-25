@@ -2,7 +2,7 @@
 set -euo pipefail
 
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-output_dir="${1:-${repo_dir}/dist/ipmitool-wcscli-windows-x64}"
+output_dir="${1:-dist/ipmitool-wcscli-windows-x64}"
 
 cd "${repo_dir}"
 autoreconf -fi
@@ -12,6 +12,9 @@ autoreconf -fi
   --disable-intf-free \
   --disable-intf-open \
   --disable-intf-bmc \
+  --disable-intf-usb \
+  --disable-intf-serial \
+  CPPFLAGS="${CPPFLAGS:--D_GNU_SOURCE}" \
   CFLAGS="${CFLAGS:--O2 -std=gnu99 -fcommon -include sys/select.h -Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types -Wno-error=int-conversion}"
 make -j"${BUILD_JOBS:-2}"
 

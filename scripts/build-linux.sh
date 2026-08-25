@@ -2,7 +2,7 @@
 set -euo pipefail
 
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-output_dir="${1:-${repo_dir}/dist/ipmitool-wcscli-linux-x86_64}"
+output_dir="${1:-dist/ipmitool-wcscli-linux-x86_64}"
 
 cd "${repo_dir}"
 autoreconf -fi
@@ -12,12 +12,15 @@ autoreconf -fi
   --disable-intf-free \
   --disable-intf-open \
   --disable-intf-bmc \
+  --disable-intf-usb \
+  --disable-intf-serial \
+  CPPFLAGS="${CPPFLAGS:--D_GNU_SOURCE}" \
   CFLAGS="${CFLAGS:--O2 -std=gnu99 -fcommon}"
 make -j"${BUILD_JOBS:-$(getconf _NPROCESSORS_ONLN)}"
 
 rm -rf "${output_dir}"
 mkdir -p "${output_dir}"
-cp src/.libs/ipmitool "${output_dir}/ipmitool"
+cp src/ipmitool "${output_dir}/ipmitool"
 cp doc/README-WCSCLI-WINDOWS.txt "${output_dir}/README-WCSCLI.txt"
 cp doc/WCSCLI_DIRECT_BMC_SPEC.md doc/WCSCLI_COMMAND_MATRIX.md "${output_dir}/"
 chmod 0755 "${output_dir}/ipmitool"
