@@ -740,6 +740,7 @@ static uint16_t supermicro_X8[] = {
 };
 
 int ipmi_sel_main(struct ipmi_intf *, int, char **);
+void ipmi_sel_set_raw_prefix(int enabled);
 void ipmi_sel_print_std_entry(struct ipmi_intf * intf, struct sel_event_record * evt);
 void ipmi_sel_print_std_entry_verbose(struct ipmi_intf * intf, struct sel_event_record * evt);
 void ipmi_sel_print_extended_entry(struct ipmi_intf * intf, struct sel_event_record * evt);

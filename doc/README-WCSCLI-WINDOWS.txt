@@ -20,6 +20,10 @@ Implemented show commands:
   info, health, fru, nvme, state, nextboot, led, log, log read,
   bios config, bios code, tpm presence
 
+`wcscli show system log` and `wcscli show system log read` include the
+Rack Manager-compatible 16-byte raw SEL record column before the decoded
+timestamp. The standard `sel elist` output is unchanged.
+
 Implemented set commands:
   on, off, reset, nextboot, led, log clear, bios config, tpm presence,
   console bmc, console host

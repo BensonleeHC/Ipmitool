@@ -49,9 +49,16 @@
 
 extern int verbose;
 static int sel_extended = 0;
+static int sel_raw_prefix = 0;
 static int sel_oem_nrecs = 0;
 
 static IPMI_OEM sel_iana = IPMI_OEM_UNKNOWN;
+
+void
+ipmi_sel_set_raw_prefix(int enabled)
+{
+	sel_raw_prefix = enabled ? 1 : 0;
+}
 
 struct ipmi_sel_oem_msg_rec {
 	int	value[14];
@@ -1712,6 +1719,8 @@ ipmi_sel_print_std_entry(struct ipmi_intf * intf, struct sel_event_record * evt)
 	char * description;
 	struct sdr_record_list * sdr = NULL;
 	int data_count;
+	int raw_index;
+	const uint8_t *raw_record;
 
 	if (sel_extended && (evt->record_type < 0xc0))
 		sdr = ipmi_sdr_find_sdr_bynumtype(intf, evt->sel_type.standard_type.gen_id, evt->sel_type.standard_type.sensor_num, evt->sel_type.standard_type.sensor_type);
@@ -1724,6 +1733,16 @@ ipmi_sel_print_std_entry(struct ipmi_intf * intf, struct sel_event_record * evt)
 		printf("%x,", evt->record_id);
 	else
 		printf("%4x | ", evt->record_id);
+
+	if (sel_raw_prefix) {
+		raw_record = (const uint8_t *)evt;
+		for (raw_index = 0; raw_index < 16; ++raw_index) {
+			printf("%02x", raw_record[raw_index]);
+			if (raw_index != 15)
+				printf(" ");
+		}
+		printf(csv_output ? "," : " | ");
+	}
 
 	if (evt->record_type == 0xf0)
 	{

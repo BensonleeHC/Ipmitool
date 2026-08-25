@@ -15,7 +15,7 @@ validation against an Olympus server.
 | `set system nextboot -t 1..5` | `none/pxe/disk/bios/floppy` | Implemented |
 | `show system led` | `ocsoem getledstatus` | Implemented |
 | `set system led on/off` | `chassis identify force/0` | Implemented |
-| `show system log [read]` | `sel elist` | Implemented; `read` is optional |
+| `show system log [read]` | `sel elist` + 16-byte raw record prefix | Implemented; RM-compatible format |
 | `set system log clear` | `sel clear` | Implemented |
 | `show system bios config` | `ocsoem biosconfig` | Implemented |
 | `show system bios code [-v current/previous]` | `ocsoem bioscode` | Implemented |

@@ -124,3 +124,7 @@ Live test target `10.46.127.44` verified the following with `-N 1 -R 1`:
 
 Some drive-specific OEM I2C requests returned completion code `0xCC`; those
 errors were reported without preventing normal process termination.
+
+WCSCLI log output prefixes every decoded SEL row with the complete 16-byte
+record in BMC byte order, matching Rack Manager output. Standard
+`ipmitool sel elist` remains unchanged.

@@ -7,6 +7,7 @@
 #include <ipmitool/ipmi_intf.h>
 #include <ipmitool/ipmi_main.h>
 #include <ipmitool/ipmi_ocs_console.h>
+#include <ipmitool/ipmi_sel.h>
 #include <ipmitool/ipmi_wcscli.h>
 #include <ipmitool/log.h>
 
@@ -159,8 +160,12 @@ show_system(struct ipmi_intf *intf, int argc, char **argv)
 	}
 	if ((same(argc, argv, 1, log) && argc == 1) ||
 		(same(argc, argv, 2, logread) && argc == 2)) {
+		int rc;
 		a1[0] = "elist";
-		return run(intf, "sel", 1, a1);
+		ipmi_sel_set_raw_prefix(1);
+		rc = run(intf, "sel", 1, a1);
+		ipmi_sel_set_raw_prefix(0);
+		return rc;
 	}
 	if (same(argc, argv, 2, biosconfig) && argc == 2) {
 		a1[0] = "biosconfig";
