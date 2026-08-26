@@ -12,6 +12,7 @@
 #include <ipmitool/log.h>
 
 #define WCSCLI_MAX_ARGS 32
+#define WCSCLI_INVALID_COMMAND (-2)
 
 static int
 run(struct ipmi_intf *intf, char *command, int argc, char **argv)
@@ -75,7 +76,7 @@ filter_instance(int argc, char **argv, int *outc, char **outv)
 		}
 		if (*outc >= WCSCLI_MAX_ARGS) {
 			lprintf(LOG_ERR, "Too many WCSCLI arguments");
-			return -1;
+			return WCSCLI_INVALID_COMMAND;
 		}
 		outv[(*outc)++] = argv[i];
 	}
@@ -178,14 +179,14 @@ show_system(struct ipmi_intf *intf, int argc, char **argv)
 		args[1] = version == NULL ? "current" : version;
 		if (strcmp(args[1], "current") != 0 &&
 			strcmp(args[1], "previous") != 0)
-			return -1;
+			return WCSCLI_INVALID_COMMAND;
 		return run(intf, "ocsoem", 2, args);
 	}
 	if (same(argc, argv, 2, tpm) && argc == 2) {
 		a1[0] = "gettpmphypresence";
 		return run(intf, "ocsoem", 1, a1);
 	}
-	return -1;
+	return WCSCLI_INVALID_COMMAND;
 }
 
 static int
@@ -209,7 +210,7 @@ set_system(struct ipmi_intf *intf, int argc, char **argv)
 		char *args[2];
 		value = option_value(argc - 1, argv + 1, "-t");
 		if (value == NULL || (value = boot_device(value)) == NULL)
-			return -1;
+			return WCSCLI_INVALID_COMMAND;
 		args[0] = "bootdev";
 		args[1] = value;
 		return run(intf, "chassis", 2, args);
@@ -222,7 +223,7 @@ set_system(struct ipmi_intf *intf, int argc, char **argv)
 		else if (strcmp(argv[1], "off") == 0)
 			args[1] = "0";
 		else
-			return -1;
+			return WCSCLI_INVALID_COMMAND;
 		return run(intf, "chassis", 2, args);
 	}
 	if (same(argc, argv, 2, logclear) && argc == 2) {
@@ -234,7 +235,7 @@ set_system(struct ipmi_intf *intf, int argc, char **argv)
 		args[1] = option_value(argc - 2, argv + 2, "-j");
 		args[2] = option_value(argc - 2, argv + 2, "-n");
 		if (args[1] == NULL || args[2] == NULL)
-			return -1;
+			return WCSCLI_INVALID_COMMAND;
 		args[0] = "setbiosconfig";
 		return run(intf, "ocsoem", 3, args);
 	}
@@ -243,14 +244,14 @@ set_system(struct ipmi_intf *intf, int argc, char **argv)
 		value = option_value(argc - 2, argv + 2, "-p");
 		if (value == NULL || (strcmp(value, "0") != 0 &&
 			strcmp(value, "1") != 0))
-			return -1;
+			return WCSCLI_INVALID_COMMAND;
 		args[0] = "settpmphypresence";
 		args[1] = strcmp(value, "1") == 0 ? "true" : "false";
 		return run(intf, "ocsoem", 2, args);
 	}
 	if (same(argc, argv, 1, console) && argc == 2)
 		return ipmi_ocs_console_select(intf, argv[1]);
-	return -1;
+	return WCSCLI_INVALID_COMMAND;
 }
 
 int
@@ -277,8 +278,8 @@ ipmi_wcscli_main(struct ipmi_intf *intf, int argc, char **argv)
 	else if (strcmp(filtered[0], "set") == 0)
 		rc = set_system(intf, count - 2, filtered + 2);
 	else
-		rc = -1;
-	if (rc != 0) {
+		rc = WCSCLI_INVALID_COMMAND;
+	if (rc == WCSCLI_INVALID_COMMAND) {
 		lprintf(LOG_ERR, "Unsupported or invalid WCSCLI command");
 		usage();
 	}

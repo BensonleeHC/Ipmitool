@@ -702,8 +702,9 @@ int ipmi_ocs_get_bios_code(struct ipmi_intf *intf, char version) {
 int ipmi_ocs_get_bios_config(struct ipmi_intf *intf) {
 	struct ipmi_rs *rsp;
 	struct ipmi_rq req;
-	struct _ipmi_bios_config biosConfig;
-	memset(&biosConfig, 0, sizeof(biosConfig));
+	uint8_t currentconfig;
+	uint8_t chosenconfig;
+	int i;
 
 	req.msg.netfn = OEM_GP4_NETFN;
 	req.msg.cmd = CMD_GET_BIOS_CONFIG;
@@ -721,21 +722,22 @@ int ipmi_ocs_get_bios_config(struct ipmi_intf *intf) {
 				val2str(rsp->ccode, completion_code_vals), rsp->ccode);
 		return (-1);
 	} else {
-		if (rsp->data_len >= sizeof(struct _ipmi_bios_config)) {
-			memcpy(&biosConfig, rsp->data, sizeof(struct _ipmi_bios_config));
+		if (rsp->data_len >= 2) {
+			currentconfig = rsp->data[0];
+			chosenconfig = rsp->data[1];
 			//bit [6:4] minor BIOS flavor
-			uint8_t minorconfig = (biosConfig.currentconfg >> 4) & 0x07;
+			uint8_t minorconfig = (currentconfig >> 4) & 0x07;
 			//bit [3:0] major BIOS flavor
-			uint8_t majorconfig = biosConfig.currentconfg & 0x0F;
+			uint8_t majorconfig = currentconfig & 0x0F;
 			printf("Current BIOS Configuration: %u.%u\n",majorconfig,minorconfig);
 
 			//bit [6:4] minor BIOS flavor
-			uint8_t chosenminorconfig = (biosConfig.chosenconfig >> 4 ) & 0x07;
+			uint8_t chosenminorconfig = (chosenconfig >> 4 ) & 0x07;
 			//bit [3:0] major BIOS flavor
-			uint8_t chosenmajorconfig = biosConfig.chosenconfig & 0x0F;
+			uint8_t chosenmajorconfig = chosenconfig & 0x0F;
 			printf("Chosen BIOS Configuration: %u.%u \n",chosenmajorconfig,chosenminorconfig);
 
-			int buflen = sizeof(biosConfig.availconfig);
+			int buflen = rsp->data_len - 2;
 
 			printf("\n\n------Available Configurations\n");
 			if (buflen == 0)
@@ -744,24 +746,21 @@ int ipmi_ocs_get_bios_config(struct ipmi_intf *intf) {
 				return 0;
 			}
 
-			for (int i = 0 ; i < buflen ; i+=4)
+			for (i = 0 ; i + 3 < buflen ; i+=4)
 			{
-				if(buflen-i >= 4)
-				{
-					uint8_t cfgname[3];
-					memcpy(cfgname, biosConfig.availconfig + i, 3);
+					char cfgname[4] = { 0, 0, 0, 0 };
+					memcpy(cfgname, rsp->data + 2 + i, 3);
 					if (cfgname[0] == 0 && cfgname[1] == 0 && cfgname[2] == 0)
 						break;
 					printf("ConfigName: %s\n", cfgname);
 
-					uint8_t cfgvalue = biosConfig.availconfig[i + 3]; // get the 4th byte
+					uint8_t cfgvalue = rsp->data[2 + i + 3]; // get the 4th byte
 					//bit [6:4] minor BIOS flavor
 					uint8_t avcfgminorconfig = (cfgvalue >> 4) & 0x07;
 					//bit [3:0] major BIOS flavor
 					uint8_t avcfgmajorconfig = cfgvalue & 0x0F;
 					printf("ConfigValue: %u.%u\n",avcfgmajorconfig,avcfgminorconfig);
 					printf("*******************************\n");  //using this string to split data in the middle tier script(python)
-				}
 			}
 			return 0;
 		} else {
