@@ -16,6 +16,7 @@ autoreconf -fi
   --disable-intf-serial \
   CPPFLAGS="${CPPFLAGS:--D_GNU_SOURCE}" \
   CFLAGS="${CFLAGS:--O2 -std=gnu99 -fcommon}"
+grep -q '^#define HAVE_CRYPTO_SHA256 1' config.h
 make -j"${BUILD_JOBS:-$(getconf _NPROCESSORS_ONLN)}"
 
 rm -rf "${output_dir}"

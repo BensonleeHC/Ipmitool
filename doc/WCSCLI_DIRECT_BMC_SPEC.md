@@ -31,6 +31,15 @@ Global options must precede `wcscli`.  The global parser stops at the first
 non-option so that uppercase `-I` belongs to ipmitool and lowercase `-i`
 belongs to the WCSCLI parser.
 
+For BMCs supporting the stronger RMCP+ profile, select Cipher Suite 17:
+
+```text
+ipmitool -I lanplus -C 17 -H <BMC-IP> -U <user> -E wcscli ...
+```
+
+Suite 17 uses RAKP-HMAC-SHA256 authentication, HMAC-SHA256-128 integrity,
+and AES-CBC-128 confidentiality. `-C 3` remains supported for legacy BMCs.
+
 ## 2. Target selection
 
 In direct-BMC mode, `-H <BMC-IP>` is authoritative.  The WCSCLI option

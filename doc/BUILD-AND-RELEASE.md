@@ -27,6 +27,11 @@ Both release builds intentionally enable only the remote `lan` and `lanplus`
 interfaces. Local OpenIPMI, FreeIPMI, USB, and serial hardware interfaces are
 disabled; standard remote SOL remains available through `lanplus`.
 
+Both builds require OpenSSL SHA-256 support and implement RMCP+ Cipher Suite
+17: RAKP-HMAC-SHA256 authentication, HMAC-SHA256-128 integrity, and
+AES-CBC-128 confidentiality. Select it explicitly with `-C 17`; Cipher Suite
+3 remains available for older BMCs.
+
 ## Windows build
 
 In an MSYS2 MSYS shell with `base-devel`, `autoconf`, `automake`, `gcc`,
@@ -41,6 +46,8 @@ The Windows artifact includes `ipmitool.exe`, `msys-2.0.dll`, and
 
 ## Release acceptance
 
-For both platforms, `ipmitool -V` must exit zero and help must list `wcscli`.
+For both platforms, configuration must define `HAVE_CRYPTO_SHA256`,
+`ipmitool -V` must exit zero, and help must list `wcscli`.
 Before publishing a release, test `wcscli show system nvme` and
-`wcscli show system log` against an Olympus BMC and retain `SHA256SUMS`.
+`wcscli show system log` with both `-C 17` and the legacy `-C 3` against an
+Olympus BMC and retain `SHA256SUMS`.

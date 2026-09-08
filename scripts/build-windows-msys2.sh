@@ -16,6 +16,7 @@ autoreconf -fi
   --disable-intf-serial \
   CPPFLAGS="${CPPFLAGS:--D_GNU_SOURCE}" \
   CFLAGS="${CFLAGS:--O2 -std=gnu99 -fcommon -include sys/select.h -Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types -Wno-error=int-conversion}"
+grep -q '^#define HAVE_CRYPTO_SHA256 1' config.h
 make -j"${BUILD_JOBS:-2}"
 
 rm -rf "${output_dir}"
